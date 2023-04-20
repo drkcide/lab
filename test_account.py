@@ -16,3 +16,37 @@ class Test:
         assert self.account2.get_name() == 'Jane'
         assert self.account1.get_balance() == 0
         assert self.account2.get_balance() == 0
+
+    def test_deposit(self):
+        assert self.account1.deposit(10) is True
+        assert self.account1.get_balance() == 10
+        assert self.account1.deposit(10.00) is True
+        assert self.account1.get_balance() == pytest.approx(20.00, abs=0.001)
+        assert self.account1.deposit(-10.00) is False
+        assert self.account1.deposit(0.00) is False
+
+        assert self.account2.deposit(10) is True
+        assert self.account2.get_balance() == 10
+        assert self.account2.deposit(10.00) is True
+        assert self.account2.get_balance() == pytest.approx(20.00, abs=0.001)
+        assert self.account2.deposit(-10.00) is False
+        assert self.account2.deposit(0.00) is False
+
+    def test_withdraw(self):
+        assert self.account1.deposit(10.00) is True
+        assert self.account1.withdraw(-10.00) is False
+        assert self.account1.withdraw(0) is False
+        assert self.account1.withdraw(5.00) is True
+        assert self.account1.get_balance() == pytest.approx(5.00, abs=0.001)
+        assert self.account1.withdraw(15.00) is False
+        assert self.account1.withdraw(5) is True
+        assert self.account1.get_balance() == pytest.approx(0.00, abs=0.001)
+
+        assert self.account2.deposit(10.00) is True
+        assert self.account2.withdraw(-10.00) is False
+        assert self.account2.withdraw(0) is False
+        assert self.account2.withdraw(5.00) is True
+        assert self.account2.get_balance() == pytest.approx(5.00, abs=0.001)
+        assert self.account2.withdraw(15.00) is False
+        assert self.account2.withdraw(5) is True
+        assert self.account2.get_balance() == pytest.approx(0.00, abs=0.001)
